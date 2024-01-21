@@ -69,6 +69,7 @@ func (s *Scope) Functions() map[string]function.Function {
 			"filesha1":         funcs.MakeFileSha1Func(s.BaseDir),
 			"filesha256":       funcs.MakeFileSha256Func(s.BaseDir),
 			"filesha512":       funcs.MakeFileSha512Func(s.BaseDir),
+			"flatmap":          funcs.FlatMapFunc,
 			"flatten":          stdlib.FlattenFunc,
 			"floor":            stdlib.FloorFunc,
 			"format":           stdlib.FormatFunc,

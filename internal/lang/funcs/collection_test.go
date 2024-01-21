@@ -1846,12 +1846,14 @@ func TestFlatmap(t *testing.T) {
 	mapOfObjectsWithMapAttr := cty.MapVal(map[string]cty.Value{
 		"parent1": cty.ObjectVal(map[string]cty.Value{
 			"child": cty.MapVal(map[string]cty.Value{
-				"value": cty.StringVal("foo"),
+				"value1": cty.StringVal("foo"),
+				"value2": cty.StringVal("fiz"),
 			}),
 		}),
 		"parent2": cty.ObjectVal(map[string]cty.Value{
 			"child": cty.MapVal(map[string]cty.Value{
-				"value": cty.StringVal("bar"),
+				"value1": cty.StringVal("bar"),
+				"value2": cty.StringVal("baz"),
 			}),
 		}),
 	})
@@ -1863,10 +1865,51 @@ func TestFlatmap(t *testing.T) {
 	}{
 		{
 			Values: []cty.Value{
-				mapOfMaps,
-				cty.StringVal("a"),
+				mapOfObjectsWithMapAttr,
+				cty.StringVal("child"),
 			},
-			Want: ,
+			Want: cty.MapVal(map[string]cty.Value{
+				"parent1value1": cty.ObjectVal(map[string]cty.Value{
+					"parent_key":  cty.StringVal("parent1"),
+					"child_key":   cty.StringVal("child"),
+					"child_value": cty.StringVal("foo"),
+				}),
+				"parent1value2": cty.ObjectVal(map[string]cty.Value{
+					"parent_key":  cty.StringVal("parent1"),
+					"child_key":   cty.StringVal("child"),
+					"child_value": cty.StringVal("fiz"),
+				}),
+				"parent2value1": cty.ObjectVal(map[string]cty.Value{
+					"parent_key":  cty.StringVal("parent2"),
+					"child_key":   cty.StringVal("child"),
+					"child_value": cty.StringVal("bar"),
+				}),
+				"parent2value2": cty.ObjectVal(map[string]cty.Value{
+					"parent_key":  cty.StringVal("parent2"),
+					"child_key":   cty.StringVal("child"),
+					"child_value": cty.StringVal("baz"),
+				}),
+			}),
+			Err: false,
 		},
+	}
+
+	for _, test := range tests {
+		t.Run(fmt.Sprintf("flatmap(%#v)", test.Values), func(t *testing.T) {
+			got, err := Flatmap(test.Values...)
+
+			if test.Err {
+				if err == nil {
+					t.Fatal("succeeded; want error")
+				}
+				return
+			} else if err != nil {
+				t.Fatalf("unexpected error: %s", err)
+			}
+
+			if !got.RawEquals(test.Want) {
+				t.Errorf("wrong result\ngot:  %#v\nwant: %#v", got, test.Want)
+			}
+		})
 	}
 }

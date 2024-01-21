@@ -692,7 +692,7 @@ var FlatMapFunc = function.New(&function.Spec{
 			return cty.NilType, function.NewArgErrorf(0, "flatmap() requires a map as the first argument")
 		}
 
-		if ty.ElementType().IsObjectType() {
+		if !ty.ElementType().IsObjectType() {
 			return cty.NilType, function.NewArgErrorf(0, "flatmap() requires a map with object elements")
 		}
 
@@ -700,7 +700,7 @@ var FlatMapFunc = function.New(&function.Spec{
 		lookupKeyStr := lookupKey.AsString()
 
 		if !ty.ElementType().HasAttribute(lookupKeyStr) {
-			return cty.NilType, function.NewArgErrorf(1, "flatmap() requires a map with object elements that have the given key")
+			return cty.NilType, function.NewArgErrorf(1, "flatmap() requires a map with object elements that have the given attribute: %s", lookupKeyStr)
 		}
 
 		childTy := ty.ElementType().AttributeTypes()[lookupKeyStr]
@@ -716,6 +716,26 @@ var FlatMapFunc = function.New(&function.Spec{
 		})), nil
 	},
 	Impl: func(args []cty.Value, retType cty.Type) (ret cty.Value, err error) {
+		separator := ""
+		if len(args) == 3 {
+			separator = args[2].AsString()
+		}
+		// create result map
+		result := cty.MapValEmpty(retType)
+
+		// for each k, v in parent map
+		args[0].ForEachElement(cty.ElementCallback(func(k, v cty.Value) bool {
+			// for each k2, v2 in child map
+			childMap := v.GetAttr(args[1].AsString())
+			childMap.ForEachElement(cty.ElementCallback(func(k2, v2 cty.Value) bool {
+				reskey := fmt.Sprintf("%s%s%s", k.AsString(), separator, k2.AsString())
+				return false
+			}))
+
+			return false
+		}))
+
+		// result[reskey] = { parent_key = k, child_key = k2, child_value = v2 }
 		return cty.NilVal, fmt.Errorf("the \"flatmap\" function is not yet implemented")
 	},
 })
@@ -790,4 +810,8 @@ func Sum(list cty.Value) (cty.Value, error) {
 // produce a new map of lists of strings.
 func Transpose(values cty.Value) (cty.Value, error) {
 	return TransposeFunc.Call([]cty.Value{values})
+}
+
+func Flatmap(args ...cty.Value) (cty.Value, error) {
+	return FlatMapFunc.Call(args)
 }
