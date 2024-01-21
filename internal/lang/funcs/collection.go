@@ -721,22 +721,26 @@ var FlatMapFunc = function.New(&function.Spec{
 			separator = args[2].AsString()
 		}
 		// create result map
-		result := cty.MapValEmpty(retType)
+		result := make(map[string]cty.Value)
 
 		// for each k, v in parent map
-		args[0].ForEachElement(cty.ElementCallback(func(k, v cty.Value) bool {
-			// for each k2, v2 in child map
+		for it := args[0].ElementIterator(); it.Next(); {
+			k, v := it.Element()
 			childMap := v.GetAttr(args[1].AsString())
-			childMap.ForEachElement(cty.ElementCallback(func(k2, v2 cty.Value) bool {
+
+			for it2 := childMap.ElementIterator(); it2.Next(); {
+				k2, v2 := it2.Element()
 				reskey := fmt.Sprintf("%s%s%s", k.AsString(), separator, k2.AsString())
-				return false
-			}))
 
-			return false
-		}))
+				result[reskey] = cty.ObjectVal(map[string]cty.Value{
+					"parent_key":  k,
+					"child_key":   k2,
+					"child_value": v2,
+				})
+			}
+		}
 
-		// result[reskey] = { parent_key = k, child_key = k2, child_value = v2 }
-		return cty.NilVal, fmt.Errorf("the \"flatmap\" function is not yet implemented")
+		return cty.MapVal(result), nil
 	},
 })
 
