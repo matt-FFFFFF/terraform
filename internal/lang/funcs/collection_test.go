@@ -1841,3 +1841,32 @@ func TestTranspose(t *testing.T) {
 		})
 	}
 }
+
+func TestFlatmap(t *testing.T) {
+	mapOfObjectsWithMapAttr := cty.MapVal(map[string]cty.Value{
+		"parent1": cty.ObjectVal(map[string]cty.Value{
+			"child": cty.MapVal(map[string]cty.Value{
+				"value": cty.StringVal("foo"),
+			}),
+		}),
+		"parent2": cty.ObjectVal(map[string]cty.Value{
+			"child": cty.MapVal(map[string]cty.Value{
+				"value": cty.StringVal("bar"),
+			}),
+		}),
+	})
+
+	tests := []struct {
+		Values []cty.Value
+		Want   cty.Value
+		Err    bool
+	}{
+		{
+			Values: []cty.Value{
+				mapOfMaps,
+				cty.StringVal("a"),
+			},
+			Want: ,
+		},
+	}
+}

@@ -653,6 +653,73 @@ var MapFunc = function.New(&function.Spec{
 	},
 })
 
+var FlatMapFunc = function.New(&function.Spec{
+	Params: []function.Parameter{
+		{
+			Name:        "inputMap",
+			Type:        cty.DynamicPseudoType,
+			AllowMarked: true,
+		},
+		{
+			Name:        "key",
+			Type:        cty.String,
+			AllowMarked: true,
+		},
+	},
+	VarParam: &function.Parameter{
+		Name:             "keyseperator",
+		Type:             cty.String,
+		AllowNull:        false,
+		AllowUnknown:     false,
+		AllowDynamicType: false,
+	},
+	Type: func(args []cty.Value) (ret cty.Type, err error) {
+		if len(args) < 1 || len(args) > 3 {
+			return cty.NilType, fmt.Errorf("flatmap() takes two or three arguments, got %d", len(args))
+		}
+
+		if !args[1].IsKnown() {
+			return cty.Map(cty.Object(map[string]cty.Type{
+				"parent_key":  cty.String,
+				"child_key":   cty.String,
+				"child_value": cty.DynamicPseudoType,
+			})), nil
+		}
+
+		ty := args[0].Type()
+
+		if !ty.IsMapType() {
+			return cty.NilType, function.NewArgErrorf(0, "flatmap() requires a map as the first argument")
+		}
+
+		if ty.ElementType().IsObjectType() {
+			return cty.NilType, function.NewArgErrorf(0, "flatmap() requires a map with object elements")
+		}
+
+		lookupKey, _ := args[1].Unmark()
+		lookupKeyStr := lookupKey.AsString()
+
+		if !ty.ElementType().HasAttribute(lookupKeyStr) {
+			return cty.NilType, function.NewArgErrorf(1, "flatmap() requires a map with object elements that have the given key")
+		}
+
+		childTy := ty.ElementType().AttributeTypes()[lookupKeyStr]
+
+		if !childTy.IsMapType() {
+			return cty.NilType, function.NewArgErrorf(1, "flatmap() requires a map with object elements that have the given key as a map")
+		}
+
+		return cty.Map(cty.Object(map[string]cty.Type{
+			"parent_key":  cty.String,
+			"child_key":   cty.String,
+			"child_value": childTy,
+		})), nil
+	},
+	Impl: func(args []cty.Value, retType cty.Type) (ret cty.Value, err error) {
+		return cty.NilVal, fmt.Errorf("the \"flatmap\" function is not yet implemented")
+	},
+})
+
 // Length returns the number of elements in the given collection or number of
 // Unicode characters in the given string.
 func Length(collection cty.Value) (cty.Value, error) {
