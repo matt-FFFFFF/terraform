@@ -42,12 +42,12 @@ require (
 	github.com/hashicorp/go-azure-helpers v0.43.0
 	github.com/hashicorp/go-checkpoint v0.5.0
 	github.com/hashicorp/go-cleanhttp v0.5.2
-	github.com/hashicorp/go-getter v1.7.3
-	github.com/hashicorp/go-hclog v1.5.0
+	github.com/hashicorp/go-getter v1.7.5
+	github.com/hashicorp/go-hclog v1.6.3
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/hashicorp/go-plugin v1.4.3
-	github.com/hashicorp/go-retryablehttp v0.7.5
-	github.com/hashicorp/go-slug v0.13.3
+	github.com/hashicorp/go-retryablehttp v0.7.7
+	github.com/hashicorp/go-slug v0.16.3
 	github.com/hashicorp/go-tfe v1.41.0
 	github.com/hashicorp/go-uuid v1.0.3
 	github.com/hashicorp/go-version v1.6.0
@@ -92,21 +92,21 @@ require (
 	go.opentelemetry.io/otel v1.21.0
 	go.opentelemetry.io/otel/sdk v1.20.0
 	go.opentelemetry.io/otel/trace v1.21.0
-	golang.org/x/crypto v0.17.0
+	golang.org/x/crypto v0.35.0
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9
-	golang.org/x/mod v0.12.0
-	golang.org/x/net v0.19.0
-	golang.org/x/oauth2 v0.11.0
-	golang.org/x/sys v0.15.0
-	golang.org/x/term v0.15.0
-	golang.org/x/text v0.14.0
-	golang.org/x/tools v0.13.0
+	golang.org/x/mod v0.17.0
+	golang.org/x/net v0.25.0
+	golang.org/x/oauth2 v0.27.0
+	golang.org/x/sys v0.30.0
+	golang.org/x/term v0.29.0
+	golang.org/x/text v0.22.0
+	golang.org/x/tools v0.21.1-0.20240508182429-e35e4ccd0d2d
 	golang.org/x/tools/cmd/cover v0.1.0-deprecated
 	google.golang.org/api v0.126.0
 	google.golang.org/genproto v0.0.0-20230822172742-b8732ec3820d
 	google.golang.org/grpc v1.59.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0
-	google.golang.org/protobuf v1.31.0
+	google.golang.org/protobuf v1.33.0
 	honnef.co/go/tools v0.5.0-0.dev.0.20230826160118-ad5ca31ff221
 	k8s.io/api v0.25.5
 	k8s.io/apimachinery v0.25.5
@@ -116,8 +116,7 @@ require (
 
 require (
 	cloud.google.com/go v0.110.7 // indirect
-	cloud.google.com/go/compute v1.23.0 // indirect
-	cloud.google.com/go/compute/metadata v0.2.3 // indirect
+	cloud.google.com/go/compute/metadata v0.3.0 // indirect
 	cloud.google.com/go/iam v1.1.1 // indirect
 	github.com/AlecAivazis/survey/v2 v2.3.6 // indirect
 	github.com/Azure/go-autorest v14.2.0+incompatible // indirect
@@ -170,7 +169,7 @@ require (
 	github.com/cli/go-gh v1.0.0 // indirect
 	github.com/cli/safeexec v1.0.0 // indirect
 	github.com/cli/shurcooL-graphql v0.0.2 // indirect
-	github.com/cloudflare/circl v1.3.7 // indirect
+	github.com/cloudflare/circl v1.6.1 // indirect
 	github.com/coreos/go-systemd v0.0.0-20181012123002-c6f51f82210d // indirect
 	github.com/creack/pty v1.1.18 // indirect
 	github.com/dimchansky/utfbom v1.1.1 // indirect
@@ -187,7 +186,7 @@ require (
 	github.com/go-openapi/swag v0.19.14 // indirect
 	github.com/gofrs/uuid v4.0.0+incompatible // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
-	github.com/golang-jwt/jwt/v4 v4.4.2 // indirect
+	github.com/golang-jwt/jwt/v4 v4.5.2 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/gnostic v0.5.7-v3refs // indirect
@@ -258,7 +257,7 @@ require (
 	go.opentelemetry.io/otel/metric v1.21.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.0.0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20221208152030-732eee02a75a // indirect
-	golang.org/x/sync v0.5.0 // indirect
+	golang.org/x/sync v0.11.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
@@ -275,4 +274,4 @@ require (
 	sigs.k8s.io/yaml v1.2.0 // indirect
 )
 
-go 1.21.5
+go 1.23.0
